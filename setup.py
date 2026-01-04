@@ -12,7 +12,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="boamp-scraper",
-    version="0.1.0",
+    version="0.2.0",
     author="Algora",
     author_email="contact@algora.fr",
     description="Scrape French public tenders (BOAMP) in 3 lines of Python",
