@@ -139,12 +139,12 @@ class TenderScraper:
         tenders = []
 
         try:
-            # Wait for Angular to render the results container
+            # Wait for Angular to render the results container (must be visible)
             logger.info("⏳ Waiting for BOAMP results to load...")
-            await page.wait_for_selector("#toplist", timeout=30000)
+            await page.wait_for_selector("#toplist", state="visible", timeout=30000)
             
             # Wait for tender cards to appear
-            await page.wait_for_selector(".card-notification", timeout=10000)
+            await page.wait_for_selector(".card-notification", state="visible", timeout=10000)
             
             # Give Angular extra time to fully render
             await asyncio.sleep(2)
