@@ -139,16 +139,16 @@ class TenderScraper:
         tenders = []
 
         try:
-            # Wait for Angular to render - the results area becomes visible
+            # Wait for Angular to render and show results
             logger.info("⏳ Waiting for BOAMP results to load...")
             
-            # Wait for the result area div (this becomes visible when results load)
-            await page.wait_for_selector("#resultarea[ng-show]:not(.ng-hide)", timeout=30000)
+            # Give Angular time to load data and render
+            await asyncio.sleep(5)
             
-            # Now wait for tender cards to actually appear
-            await page.wait_for_selector(".card-notification", state="visible", timeout=10000)
+            # Wait directly for tender cards to appear (simpler approach)
+            await page.wait_for_selector(".card-notification", state="visible", timeout=25000)
             
-            # Give Angular extra time to fully render all cards
+            # Give extra time for all cards to render
             await asyncio.sleep(2)
             
             # Get all tender cards
