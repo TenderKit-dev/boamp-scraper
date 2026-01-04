@@ -135,141 +135,137 @@ class TenderScraper:
             await page.close()
 
     async def _extract_tenders(self, page, filters: SearchFilters) -> List[Tender]:
-        """Extract tender data from page"""
+        """Extract tender data from page using real BOAMP selectors"""
         tenders = []
 
-        # TODO: Fix real selectors for BOAMP (Week 1)
-        # For now, use mock data to test the flow
-        logger.warning("⚠️  Using MOCK DATA (real scraping TODO)")
+        try:
+            # Wait for Angular to render the results container
+            logger.info("⏳ Waiting for BOAMP results to load...")
+            await page.wait_for_selector("#toplist", timeout=30000)
+            
+            # Wait for tender cards to appear
+            await page.wait_for_selector(".card-notification", timeout=10000)
+            
+            # Give Angular extra time to fully render
+            await asyncio.sleep(2)
+            
+            # Get all tender cards
+            elements = await page.query_selector_all(".card-notification.fr-callout.fr-callout--boamp")
+            logger.info(f"✅ Found {len(elements)} tenders")
 
-        mock_tenders = [
-            {
-                "title": "Développement d'une plateforme Cloud Azure",
-                "organisme": "Ministère de l'Intérieur",
-                "budget": 250000,
-                "category": TenderCategory.CLOUD_INFRASTRUCTURE,
-            },
-            {
-                "title": "Audit de cybersécurité et tests d'intrusion",
-                "organisme": "Région Île-de-France",
-                "budget": 180000,
-                "category": TenderCategory.CYBERSECURITY,
-            },
-            {
-                "title": "Maintenance applicative Java / Spring Boot",
-                "organisme": "CHU de Paris",
-                "budget": 120000,
-                "category": TenderCategory.MAINTENANCE,
-            },
-            {
-                "title": "Développement d'une application mobile iOS/Android",
-                "organisme": "Ville de Lyon",
-                "budget": 90000,
-                "category": TenderCategory.MOBILE,
-            },
-            {
-                "title": "Migration infrastructure vers AWS",
-                "organisme": "Ministère de l'Éducation Nationale",
-                "budget": 300000,
-                "category": TenderCategory.CLOUD_INFRASTRUCTURE,
-            },
-            {
-                "title": "Conseil en transformation digitale",
-                "organisme": "Région Normandie",
-                "budget": 150000,
-                "category": TenderCategory.CONSULTING,
-            },
-            {
-                "title": "Développement site web institutionnel",
-                "organisme": "Ville de Marseille",
-                "budget": 75000,
-                "category": TenderCategory.WEB,
-            },
-            {
-                "title": "Formation cybersécurité pour 50 agents",
-                "organisme": "Ministère de la Justice",
-                "budget": 100000,
-                "category": TenderCategory.CYBERSECURITY,
-            },
-            {
-                "title": "Solution BI / Data Analytics",
-                "organisme": "Région Bretagne",
-                "budget": 200000,
-                "category": TenderCategory.BI_DATA,
-            },
-            {
-                "title": "Support technique N2/N3 infrastructure",
-                "organisme": "CHU de Toulouse",
-                "budget": 110000,
-                "category": TenderCategory.MAINTENANCE,
-            },
-        ]
+            if len(elements) == 0:
+                logger.warning("⚠️  No tenders found - check if search returned results")
+                return tenders
 
-        # Filter mock data by keywords
-        for mock in mock_tenders[: filters.limit]:
-            # Simple keyword matching
-            title_lower = mock["title"].lower()
-            if filters.keywords:
-                if not any(kw.lower() in title_lower for kw in filters.keywords):
+            # Parse each tender
+            for i, element in enumerate(elements):
+                try:
+                    tender = await self._parse_tender_element(element)
+                    if tender:
+                        # Apply filters
+                        if self._matches_filters(tender, filters):
+                            tenders.append(tender)
+                            logger.debug(f"  ✓ Tender #{i+1}: {tender.title[:60]}...")
+
+                            if len(tenders) >= filters.limit:
+                                logger.info(f"🎯 Reached limit of {filters.limit} tenders")
+                                break
+                    else:
+                        logger.debug(f"  ⚠️  Could not parse tender #{i+1}")
+                        
+                except Exception as e:
+                    logger.warning(f"  ⚠️  Error parsing tender #{i+1}: {e}")
                     continue
 
-            tender = Tender(
-                title=mock["title"],
-                organisme=mock["organisme"],
-                budget=mock["budget"],
-                date_publication=datetime.now(),
-                url=f"https://www.boamp.fr/avis/detail/mock-{mock['title'][:20].replace(' ', '-')}",
-                category=mock["category"],
-                region=None,
-                description=None,
-            )
-
-            if self._matches_filters(tender, filters):
-                tenders.append(tender)
-
-                if len(tenders) >= filters.limit:
-                    break
+        except TimeoutError:
+            logger.error("❌ Timeout waiting for BOAMP results to load")
+            logger.error("   This might mean:")
+            logger.error("   1. BOAMP is down or slow")
+            logger.error("   2. Your search returned no results")
+            logger.error("   3. Network issues")
+        except Exception as e:
+            logger.error(f"❌ Error extracting tenders: {e}")
 
         return tenders
 
     async def _parse_tender_element(self, element) -> Optional[Tender]:
-        """Parse single tender element"""
+        """Parse single tender element using real BOAMP structure"""
         try:
-            # Extract title
-            title_elem = await element.query_selector("h2, h3, .title, .titre")
-            title = await title_elem.inner_text() if title_elem else "N/A"
+            # Extract title (from h2 > span with ng-bind-html)
+            title = "N/A"
+            title_elem = await element.query_selector("h2 span[ng-bind-html]")
+            if title_elem:
+                title = await title_elem.inner_text()
+            else:
+                # Fallback: try h2 > a > span
+                title_elem = await element.query_selector("h2 a span")
+                if title_elem:
+                    title = await title_elem.inner_text()
 
-            # Extract organisme
-            org_elem = await element.query_selector(".organisme, .organization")
-            organisme = await org_elem.inner_text() if org_elem else "N/A"
+            # Extract organisme (from span with ng-bind-html containing 'nomacheteur')
+            organisme = "N/A"
+            org_elem = await element.query_selector("span[ng-bind-html*='nomacheteur']")
+            if org_elem:
+                organisme = await org_elem.inner_text()
 
-            # Extract URL
-            link_elem = await element.query_selector("a")
-            url = await link_elem.get_attribute("href") if link_elem else ""
-            if url and not url.startswith("http"):
-                url = f"https://www.boamp.fr{url}"
+            # Extract tender ID (from label for checkbox)
+            tender_id = None
+            id_elem = await element.query_selector("label[for^='checkboxes-select-avis-']")
+            if id_elem:
+                id_text = await id_elem.inner_text()
+                # Format: "Avis n° 26-12"
+                if "°" in id_text:
+                    tender_id = id_text.split("°")[1].strip()
 
-            # Extract budget (if available)
+            # Extract URL (from h2 > a)
+            url = ""
+            link_elem = await element.query_selector("h2 a")
+            if link_elem:
+                url = await link_elem.get_attribute("href")
+                if url and not url.startswith("http"):
+                    url = f"https://www.boamp.fr{url}"
+            elif tender_id:
+                # Construct URL from tender ID
+                url = f"https://www.boamp.fr/pages/avis?q=idweb:\"{tender_id}\""
+
+            # Extract date (from span containing "Publié le")
+            date_pub = datetime.now()  # Default to now
+            date_elems = await element.query_selector_all("span")
+            for date_elem in date_elems:
+                text = await date_elem.inner_text()
+                if "Publié le" in text:
+                    # Parse French date format (e.g. "4 janvier 2026")
+                    try:
+                        date_str = text.replace("Publié le", "").strip()
+                        # For now, use current date (full parsing would need French locale)
+                        date_pub = datetime.now()
+                    except:
+                        pass
+                    break
+
+            # Budget is NOT available in the list (would need to visit detail page)
             budget = 0
-            budget_elem = await element.query_selector(".montant, .budget, .price")
-            if budget_elem:
-                budget_text = await budget_elem.inner_text()
-                budget = self._parse_budget(budget_text)
+
+            # Extract department/region
+            region = None
+            dept_elem = await element.query_selector("span[ng-repeat*='dept']")
+            if dept_elem:
+                region = await dept_elem.inner_text()
 
             # Create tender object
             return Tender(
                 title=title.strip(),
                 organisme=organisme.strip(),
                 budget=budget,
-                date_publication=datetime.now(),
+                date_publication=date_pub,
                 url=url,
-                category=TenderCategory.OTHER,
-                region=None,
+                category=TenderCategory.OTHER,  # Would need NLP/keywords to categorize
+                region=region.strip() if region else None,
                 description=None,
             )
 
         except Exception as e:
-            logger.debug(f"Error parsing element: {e}")
+            logger.debug(f"⚠️  Error parsing tender element: {e}")
             return None
 
     def _parse_budget(self, text: str) -> int:
