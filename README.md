@@ -2,6 +2,8 @@
 
 > Scrape French public tenders (BOAMP) in 3 lines of Python
 
+[![PyPI version](https://img.shields.io/pypi/v/boamp-scraper.svg)](https://pypi.org/project/boamp-scraper/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/boamp-scraper.svg)](https://pypi.org/project/boamp-scraper/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/Ouailleme/boamp-scraper/actions/workflows/tests.yml/badge.svg)](https://github.com/Ouailleme/boamp-scraper/actions/workflows/tests.yml)
