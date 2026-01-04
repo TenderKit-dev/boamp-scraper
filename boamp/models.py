@@ -5,7 +5,7 @@ Data models for BOAMP Scraper
 from datetime import datetime
 from typing import Optional, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class TenderCategory(str, Enum):
@@ -46,8 +46,8 @@ class Tender(BaseModel):
     region: Optional[str] = Field(default=None, description="Region")
     description: Optional[str] = Field(default=None, description="Short description")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "title": "Développement d'une application web de gestion",
                 "organisme": "Ministère de l'Intérieur",
@@ -59,6 +59,7 @@ class Tender(BaseModel):
                 "description": "Développement d'une application web pour la gestion...",
             }
         }
+    )
 
 
 class SearchFilters(BaseModel):
@@ -81,8 +82,8 @@ class SearchFilters(BaseModel):
     region: Optional[str] = Field(default=None, description="Region filter")
     limit: int = Field(default=50, ge=1, le=500, description="Maximum results (1-500)")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "keywords": ["cloud", "aws", "azure"],
                 "category": "Cloud et infrastructure",
@@ -92,3 +93,4 @@ class SearchFilters(BaseModel):
                 "limit": 50,
             }
         }
+    )
