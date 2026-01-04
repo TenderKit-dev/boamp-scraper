@@ -7,4 +7,3 @@ from .models import Tender, TenderCategory
 
 __version__ = "0.1.0"
 __all__ = ["TenderScraper", "Tender", "TenderCategory"]
-
