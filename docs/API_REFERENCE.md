@@ -377,7 +377,7 @@ By default, the scraper uses:
 
 - **GitHub Issues:** https://github.com/Ouailleme/boamp-scraper/issues
 - **Docs:** https://github.com/Ouailleme/boamp-scraper
-- **Email:** contact@algora.fr
+- **Email:** ouailleme@gmail.com
 
 ---
 

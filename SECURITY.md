@@ -12,7 +12,7 @@ We release patches for security vulnerabilities. Which versions are eligible for
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to: contact@algora.fr
+Instead, please report them via email to: ouailleme@gmail.com
 
 You should receive a response within 48 hours. If for some reason you do not, please follow up via email to ensure we received your original message.
 
@@ -80,5 +80,5 @@ We thank the security researchers and users who report vulnerabilities to the BO
 
 ## Contact
 
-For any security concerns, please email: contact@algora.fr
+For any security concerns, please email: ouailleme@gmail.com
 

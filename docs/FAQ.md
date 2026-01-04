@@ -400,7 +400,7 @@ We prioritize features based on community votes (👍 reactions).
 
 2. **GitHub Issues:** https://github.com/Ouailleme/boamp-scraper/issues
 
-3. **Email:** contact@algora.fr
+3. **Email:** ouailleme@gmail.com
 
 ---
 

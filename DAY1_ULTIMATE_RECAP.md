@@ -427,7 +427,7 @@ This is what's possible when:
 - **GitHub:** https://github.com/Ouailleme/boamp-scraper
 - **Version:** 0.2.0
 - **License:** MIT
-- **Contact:** contact@algora.fr
+- **Contact:** ouailleme@gmail.com
 
 ---
 

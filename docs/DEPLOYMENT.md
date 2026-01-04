@@ -610,7 +610,7 @@ RUN python -m playwright install --with-deps chromium
 
 - **Issues:** https://github.com/Ouailleme/boamp-scraper/issues
 - **Discussions:** https://github.com/Ouailleme/boamp-scraper/discussions
-- **Email:** contact@algora.fr
+- **Email:** ouailleme@gmail.com
 
 ---
 

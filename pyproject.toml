@@ -8,7 +8,7 @@ version = "0.2.0"
 description = "Scrape French public tenders (BOAMP) in 3 lines of Python"
 readme = "README.md"
 authors = [
-    {name = "Algora", email = "contact@algora.fr"}
+    {name = "TenderKit", email = "ouailleme@gmail.com"}
 ]
 license = {text = "MIT"}
 classifiers = [

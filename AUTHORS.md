@@ -5,7 +5,7 @@ This project exists thanks to all the people who contribute.
 ## 👨‍💻 Core Team
 
 ### Creator & Maintainer
-- **Algora** - *Initial work, architecture, development* - [@Ouailleme](https://github.com/Ouailleme)
+- **TenderKit** - *Initial work, architecture, development* - [@Ouailleme](https://github.com/Ouailleme)
 
 ## 🙏 Contributors
 

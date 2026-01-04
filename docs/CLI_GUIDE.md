@@ -484,7 +484,7 @@ done
 
 - **GitHub Issues:** https://github.com/Ouailleme/boamp-scraper/issues
 - **Documentation:** https://github.com/Ouailleme/boamp-scraper
-- **Email:** contact@algora.fr
+- **Email:** ouailleme@gmail.com
 
 ---
 

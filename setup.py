@@ -13,16 +13,16 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 setup(
     name="boamp-scraper",
     version="0.2.0",
-    author="Algora",
-    author_email="contact@algora.fr",
+    author="TenderKit",
+    author_email="ouailleme@gmail.com",
     description="Scrape French public tenders (BOAMP) in 3 lines of Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/algora/boamp-scraper",
+    url="https://github.com/tenderkit/boamp-scraper",
     project_urls={
-        "Bug Tracker": "https://github.com/algora/boamp-scraper/issues",
-        "Documentation": "https://github.com/algora/boamp-scraper#readme",
-        "Source Code": "https://github.com/algora/boamp-scraper",
+        "Bug Tracker": "https://github.com/tenderkit/boamp-scraper/issues",
+        "Documentation": "https://github.com/tenderkit/boamp-scraper#readme",
+        "Source Code": "https://github.com/tenderkit/boamp-scraper",
     },
     packages=find_packages(exclude=["tests", "tests.*"]),
     classifiers=[

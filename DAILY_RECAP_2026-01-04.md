@@ -288,7 +288,7 @@ Merci à l'utilisateur pour:
 **🎯 THE CODE SPEAKS FOR ITSELF.**
 
 **🔗 GitHub:** https://github.com/Ouailleme/boamp-scraper  
-**📧 Email:** contact@algora.fr
+**📧 Email:** ouailleme@gmail.com
 
 ---
 

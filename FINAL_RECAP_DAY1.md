@@ -362,7 +362,7 @@ To the user for:
 **Next:** Week 2 - Optimization & Features
 
 **🔗 GitHub:** https://github.com/Ouailleme/boamp-scraper  
-**📧 Email:** contact@algora.fr
+**📧 Email:** ouailleme@gmail.com
 
 ---
 

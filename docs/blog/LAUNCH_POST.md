@@ -1,7 +1,7 @@
 # Introducing BOAMP Scraper: Scrape French Public Tenders in 3 Lines of Python
 
 **Published:** January 4, 2026  
-**Author:** Algora  
+**Author:** TenderKit  
 **Tags:** Python, Open Source, Web Scraping, Public Procurement, France
 
 ---
@@ -270,11 +270,11 @@ Whether you're a freelancer, a consulting firm, or a business developer, BOAMP S
 
 ## About the Author
 
-**Algora** is building tools for the French public procurement ecosystem. Our mission: make tender monitoring accessible to everyone.
+**TenderKit** is building tools for the French public procurement ecosystem. Our mission: make tender monitoring accessible to everyone.
 
 **Connect:**
 - GitHub: [@Ouailleme](https://github.com/Ouailleme)
-- Email: contact@algora.fr
+- Email: ouailleme@gmail.com
 
 ---
 
