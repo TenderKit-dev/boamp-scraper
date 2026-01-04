@@ -14,6 +14,13 @@ from .models import Tender, TenderCategory, SearchFilters
 
 logger = logging.getLogger("boamp-scraper")
 
+# Configure logging format
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
 
 class TenderScraper:
     """
@@ -45,6 +52,8 @@ class TenderScraper:
         if self._browser:
             return
         
+        logger.info("🌐 Initializing Playwright browser...")
+        
         self._playwright = await async_playwright().start()
         
         # Stealth args (anti-detection)
@@ -67,7 +76,7 @@ class TenderScraper:
             timezone_id='Europe/Paris'
         )
         
-        logger.info("✅ Browser initialized")
+        logger.info("✅ Browser initialized successfully")
     
     async def _close_browser(self):
         """Close browser"""
@@ -327,6 +336,12 @@ class TenderScraper:
             ...     limit=10
             ... )
         """
+        logger.info("🔍 Starting tender search...")
+        logger.info(f"   Keywords: {keywords or 'all'}")
+        logger.info(f"   Category: {category.value if category else 'all'}")
+        logger.info(f"   Budget range: {budget_min or 0} - {budget_max or '∞'} EUR")
+        logger.info(f"   Limit: {limit}")
+        
         filters = SearchFilters(
             keywords=keywords or [],
             category=category,
@@ -338,10 +353,16 @@ class TenderScraper:
         
         try:
             tenders = await self._scrape_page(filters)
+            logger.info(f"✅ Search complete: {len(tenders)} tenders found")
             return tenders
+        
+        except Exception as e:
+            logger.error(f"❌ Search failed: {e}")
+            raise
         
         finally:
             await self._close_browser()
+            logger.info("🔒 Browser closed")
     
     def search(
         self,

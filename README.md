@@ -85,36 +85,64 @@ pip install -e .
 
 ## 💻 Usage Examples
 
-### Basic Search
+We provide 3 complete examples in the `examples/` directory:
+
+### 1. Basic Search (`examples/basic.py`)
 
 ```python
 from boamp import TenderScraper
 
 scraper = TenderScraper()
-tenders = scraper.search(keywords=["développement", "application"], limit=20)
+tenders = scraper.search(keywords=["cloud", "cybersécurité"], limit=10)
 
 for tender in tenders:
     print(tender.title)
     print(tender.organisme)
-    print(tender.budget)
-    print(tender.url)
+    print(f"{tender.budget:,}€")
     print("---")
 ```
 
-### Advanced Filtering
+### 2. Advanced Filtering (`examples/advanced_filters.py`)
 
 ```python
 from boamp import TenderScraper, TenderCategory
 
 scraper = TenderScraper()
+
+# Filter by category
 tenders = scraper.search(
     keywords=["cloud", "aws", "azure"],
-    category=TenderCategory.IT_DEVELOPMENT,
-    budget_min=50000,
-    budget_max=500000,
-    region="Île-de-France",
-    limit=50
+    category=TenderCategory.CLOUD_INFRASTRUCTURE,
+    limit=5
 )
+
+# Filter by budget range
+tenders = scraper.search(
+    keywords=["développement", "application"],
+    budget_min=100000,
+    budget_max=300000,
+    limit=10
+)
+```
+
+### 3. Export to CSV (`examples/export_csv.py`)
+
+```python
+import csv
+from datetime import datetime
+from boamp import TenderScraper
+
+scraper = TenderScraper()
+tenders = scraper.search(keywords=["informatique"], limit=50)
+
+output_file = f"boamp_tenders_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+with open(output_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow(["Title", "Organization", "Budget (EUR)", "Category", "URL"])
+    
+    for tender in tenders:
+        writer.writerow([tender.title, tender.organisme, tender.budget, 
+                         tender.category.value, tender.url])
 ```
 
 ### Async Usage
@@ -125,35 +153,10 @@ from boamp import TenderScraper
 
 async def main():
     scraper = TenderScraper()
-    tenders = await scraper.search_async(
-        keywords=["cybersécurité"],
-        limit=10
-    )
+    tenders = await scraper.search_async(keywords=["cybersécurité"], limit=10)
     print(f"Found {len(tenders)} tenders")
 
 asyncio.run(main())
-```
-
-### Export to CSV
-
-```python
-import csv
-from boamp import TenderScraper
-
-scraper = TenderScraper()
-tenders = scraper.search(keywords=["site web"], limit=100)
-
-with open("tenders.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    writer.writerow(["Title", "Organisme", "Budget", "URL"])
-    
-    for tender in tenders:
-        writer.writerow([
-            tender.title,
-            tender.organisme,
-            tender.budget,
-            tender.url
-        ])
 ```
 
 ---
