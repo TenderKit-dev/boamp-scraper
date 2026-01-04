@@ -53,3 +53,7 @@ Thumbs.db
 # Playwright
 .playwright/
 
+# Exported data
+*.csv
+!examples/*.csv
+
