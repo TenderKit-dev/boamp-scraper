@@ -62,11 +62,22 @@ That's it! 🎉
 
 ## 📚 Documentation
 
+### Getting Started
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Quick Start Guide (5 min)](docs/QUICK_START.md)
+
+### Guides
 - [Advanced Usage](#advanced-usage)
-- [API Reference](./docs/API_REFERENCE.md)
-- [Contributing](./CONTRIBUTING.md)
+- [Use Cases (10 examples)](docs/USE_CASES.md)
+- [API Reference](docs/API_REFERENCE.md)
+- [FAQ](docs/FAQ.md)
+
+### Project Info
+- [Roadmap (Week 1-12)](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Launch Blog Post](docs/blog/LAUNCH_POST.md)
 
 ---
 
